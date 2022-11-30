@@ -1,5 +1,4 @@
 import re
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -78,9 +77,9 @@ def get_data(code):
 '''
 def data_chuli(data):
     #获取数据,这几句运行一次就可以，数据就保存到本地的文件了
-    # for name, code in zip(data[1][0], data[0][0]):
-    #     exec(f"{name}=get_data(code)")
-    #     exec(f"get_data(code).to_csv('{name}.csv')")
+    for name, code in zip(data[1][0], data[0][0]):
+        exec(f"{name}=get_data(code)")
+        exec(f"get_data(code).to_csv('{name}.csv')")
 
     for name,i in zip(data[1][0], range(4)):
         exec(f"data[1][0][i]= pd.read_csv('{name}.csv')")
@@ -170,6 +169,11 @@ def MigAeage(data, new_data, date_mouth):
     fig.set_figwidth(18)
     # 修改斜体字部分，改用循环实现
     for i, company in enumerate(new_data, 0):
+        print("平均移动的数据")
+        print(company[['close',
+                     'MA for 10 days',
+                     'MA for 20 days',
+                     'MA for 50 days']])
         if(i<2):
             company[['close',
                      'MA for 10 days',
@@ -197,6 +201,8 @@ def pjrhbl(data, new_data, date_mouth):
     fig.set_figwidth(15)
     plt.suptitle('平均日回报率图', fontsize=30, color='blue')
     for i, company in enumerate(new_data, 0):
+        print("平均日回报率:")
+        print(company['Daily Return'])
         if (i<2):
             company['Daily Return'].plot(ax=axes[0, i],
                                          legend=True,
@@ -248,7 +254,7 @@ def hbl(data, new_data):
     print('股票的日回报')
     print(liquor_rets.head())
 
-    # 单支日收益相关图
+    # # 单支日收益相关图
     hbl_dzrsyxg(liquor_rets)
     # 四支日收益相关图
     hbl_szrsyxg(liquor_rets, closing_df)
@@ -435,9 +441,16 @@ def spjyc(mydata, new_data, date_mouth):
         rmse = np.sqrt(np.mean(((predictions - y_test) ** 2)))
         # 将训练数据、实际数据集预测数据可视化。
         train = data[:training_data_len]
+        print("训练的数据:")
+        print(train.close)
         valid = data[training_data_len:]
+        print("实际的数据:")
+        print(valid.close)
         valid['Predictions'] = predictions
-        print(f"使用LSTM模型预测{mydata[2][0][times]}股票的股价是")
+        # 打印预测的信息
+        print(f"使用LSTM模型预测{mydata[2][0][times]}股票的股价是:")
+        print(valid['Predictions'])
+
         plt.figure(figsize=(13, 8))
         plt.title(f'{mydata[2][0][times]}模型')
         plt.xlabel('日期', fontsize=18)
@@ -477,22 +490,21 @@ if __name__ == "__main__":
     date_mouth =get_mouth(new_data)
 
     # 画出收盘价格
-    # lsspj(data, new_data, date_mouth)
+    lsspj(data, new_data, date_mouth)
     # 画出每日交易量
-    # mrjyl(data, new_data, date_mouth)
+    mrjyl(data, new_data, date_mouth)
     # 各股票移动平均线
-    # MigAeage(data, new_data, date_mouth)
+    MigAeage(data, new_data, date_mouth)
     # 平均日回报率
-    # pjrhbl(data, new_data, date_mouth)
+    pjrhbl(data, new_data, date_mouth)
     #股票的回报率
     hbl(data, new_data)
 
     # 收盘价预测
-    # spjyc(data, new_data, date_mouth)
+    spjyc(data, new_data, date_mouth)
 
 
-    # 将四支股票数据进行纵向合并
-    # df = pd.concat(new_data,axis=0)
+
 
 
 

@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\股票代码及对应公司名字.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
